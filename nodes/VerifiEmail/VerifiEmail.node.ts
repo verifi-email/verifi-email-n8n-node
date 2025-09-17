@@ -11,15 +11,15 @@ import {
 
 export class VerifiEmail implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'VerifiEmail',
+		displayName: 'Verifi Email',
 		name: 'verifiEmail',
-		icon: { light:'file:verifiemail.svg',dark: 'file:verifiemail.svg'},
+		icon: { light:'file:verifiemail.svg', dark: 'file:verifiemail.svg' },
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Email validation and domain health check using VerifiEmail API',
 		defaults: {
-			name: 'VerifiEmail',
+			name: 'Verifi Email',
 		},
 		inputs: [{ type: NodeConnectionType.Main }],
 		outputs: [{ type: NodeConnectionType.Main }],
@@ -37,7 +37,7 @@ export class VerifiEmail implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
-						name: 'Validate Email',
+						name: 'Validate Email Address',
 						value: 'validateEmail',
 						description: 'Validate a single email address',
 						action: 'Validate an email address',
@@ -61,7 +61,7 @@ export class VerifiEmail implements INodeType {
 						operation: ['validateEmail'],
 					},
 				},
-				default: '',
+				default: 'support@verifi.email',
 				placeholder: 'user@example.org',
 				description: 'The email address to validate',
 			},
@@ -75,7 +75,7 @@ export class VerifiEmail implements INodeType {
 						operation: ['checkDomainHealth'],
 					},
 				},
-				default: '',
+				default: 'verifi.email',
 				placeholder: 'example.org',
 				description: 'The domain to check',
 			},
@@ -83,7 +83,6 @@ export class VerifiEmail implements INodeType {
 				displayName: 'Selector',
 				name: 'selector',
 				type: 'string',
-				required: false,
 				displayOptions: {
 					show: {
 						operation: ['checkDomainHealth'],
@@ -91,7 +90,7 @@ export class VerifiEmail implements INodeType {
 				},
 				default: 'google',
 				placeholder: 'google',
-				description: 'DKIM selector to check (optional)',
+				description: "DKIM selector to check (optional). Use 'google' or 'default'.",
 			},
 		],
 	};

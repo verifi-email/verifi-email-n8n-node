@@ -9,7 +9,6 @@ export class VerifiEmailApi implements ICredentialType {
 	name = 'verifiEmailApi';
 	displayName = 'VerifiEmail API';
 	documentationUrl = 'https://docs.verifi.email/authentication';
-	icon = 'file:verifiemail.svg';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
