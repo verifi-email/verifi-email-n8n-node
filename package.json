@@ -1,15 +1,15 @@
 {
-  "name": "n8n-nodes-<...>",
-  "version": "0.1.0",
-  "description": "",
+  "name": "n8n-nodes-verifiemail",
+  "version": "1.0.0",
+  "description": "n8n node for VerifiEmail API - Powerful Email validation API",
   "keywords": [
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://verifi.email",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Verfi.Email",
+    "email": "support@verifi.email"
   },
   "repository": {
     "type": "git",
@@ -33,12 +33,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/VerifiEmailApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/VerifiEmail/VerifiEmail.node.js"
     ]
   },
   "devDependencies": {
@@ -51,5 +49,9 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "overrides": {
+    "axios": "^1.12.0",
+    "form-data": "^4.0.4"
   }
 }

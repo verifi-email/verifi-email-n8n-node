@@ -1,0 +1,19 @@
+{
+	"node": "n8n-nodes-base.verifiEmail",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Utility"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://verifi.email/docs"
+			}
+		],
+		"credentialDocumentation": [
+			{
+				"url": "https://app.verifi.email/register"
+			}
+		]
+	},
+	"alias": ["email validation", "email verify", "email checker"]
+}
