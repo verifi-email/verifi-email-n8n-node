@@ -40,14 +40,14 @@ export class VerifiEmail implements INodeType {
 					{
 						name: 'Validate Email Address',
 						value: 'validateEmail',
-						description: 'Validate a single email address',
-						action: 'Validate an email address',
+						description: 'Validate a Single Email Address',
+						action: 'Validate an Email Address',
 					},
 					{
 						name: 'Check Domain Health',
 						value: 'checkDomainHealth',
-						description: 'Check domain health and configuration',
-						action: 'Check domain health',
+						description: 'Check Domain Health and Configuration',
+						action: 'Check Domain Health',
 					},
 				],
 				default: 'validateEmail',

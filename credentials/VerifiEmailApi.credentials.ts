@@ -8,7 +8,7 @@ import {
 export class VerifiEmailApi implements ICredentialType {
 	name = 'verifiEmailApi';
 	displayName = 'VerifiEmail API';
-	documentationUrl = 'https://docs.verifi.email/authentication';
+	documentationUrl = 'https://app.verifi.email/register';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
