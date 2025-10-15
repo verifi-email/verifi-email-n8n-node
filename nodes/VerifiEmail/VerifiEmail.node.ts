@@ -5,7 +5,7 @@ import {
 	INodeTypeDescription,
 	NodeOperationError,
 	IHttpRequestMethods,
-	IRequestOptions,
+	IHttpRequestOptions,
 	NodeConnectionType,
 } from 'n8n-workflow';
 
@@ -103,7 +103,7 @@ export class VerifiEmail implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			try {
 				const operation = this.getNodeParameter('operation', i) as string;
-				const credentials = await this.getCredentials('verifiEmailApi', i);
+				await this.getCredentials('verifiEmailApi', i);
 
 				if (operation === 'validateEmail') {
 					const email = this.getNodeParameter('email', i) as string;
@@ -114,17 +114,20 @@ export class VerifiEmail implements INodeType {
 						});
 					}
 
-					const options: IRequestOptions = {
+				const options: IHttpRequestOptions = {
 						method: 'GET' as IHttpRequestMethods,
-						url: 'https://api.verifi.email/check',
-						qs: {
-							token: credentials.apiKey as string,
-							email: email,
-						},
+					url: 'https://api.verifi.email/check',
+					qs: {
+						email: email,
+					},
 						json: true,
 					};
 
-					const response = await this.helpers.request(options);
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'verifiEmailApi',
+						options,
+					);
 
 					returnData.push({
 						json: {
@@ -146,24 +149,27 @@ export class VerifiEmail implements INodeType {
 						});
 					}
 
-					const queryParams: any = {
-						token: credentials.apiKey as string,
-						domain: domain,
-					};
+				const queryParams: any = {
+					domain: domain,
+				};
 
 					// Add selector only if provided
 					if (selector) {
 						queryParams.selector = selector;
 					}
 
-					const options: IRequestOptions = {
+				const options: IHttpRequestOptions = {
 						method: 'GET' as IHttpRequestMethods,
 						url: 'https://api.verifi.email/v1/domain/check',
 						qs: queryParams,
 						json: true,
 					};
 
-					const response = await this.helpers.request(options);
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'verifiEmailApi',
+						options,
+					);
 
 					returnData.push({
 						json: {
