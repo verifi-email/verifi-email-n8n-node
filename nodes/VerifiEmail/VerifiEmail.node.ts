@@ -62,7 +62,7 @@ export class VerifiEmail implements INodeType {
 						operation: ['validateEmail'],
 					},
 				},
-				default: 'support@verifi.email',
+				default: 'contact@verifi.email',
 				placeholder: 'user@example.org',
 				description: 'The email address to validate',
 			},

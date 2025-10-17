@@ -149,7 +149,7 @@ Please refer to your [Verifi.Email dashboard](https://app.verifi.email) for curr
 - **Documentation**: [https://verifi.email/docs](https://verifi.email/docs)
 - **Website**: [https://verifi.email](https://verifi.email)
 - **Issues**: Report issues on this GitHub repository
-- **API Support**: Contact us on **support@verifi.email**
+- **API Support**: Contact us on **contact@verifi.email**
 
 ## Contributing
 
