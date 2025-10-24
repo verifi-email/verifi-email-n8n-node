@@ -121,6 +121,7 @@ export class VerifiEmail implements INodeType {
 						email: email,
 					},
 						json: true,
+						skipSslCertificateValidation: true,
 					};
 
 					const response = await this.helpers.httpRequestWithAuthentication.call(
@@ -163,6 +164,7 @@ export class VerifiEmail implements INodeType {
 						url: 'https://api.verifi.email/v1/domain/check',
 						qs: queryParams,
 						json: true,
+						skipSslCertificateValidation: true,
 					};
 
 					const response = await this.helpers.httpRequestWithAuthentication.call(
