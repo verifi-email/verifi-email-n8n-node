@@ -44,6 +44,12 @@ export class VerifiEmail implements INodeType {
 						action: 'Validate an email address',
 					},
 					{
+						name: 'Validate Multiple Emails',
+						value: 'bulkValidateEmails',
+						description: 'Validate Multiple Email Addresses in Bulk',
+						action: 'Validate multiple email addresses',
+					},
+					{
 						name: 'Check Domain Health',
 						value: 'checkDomainHealth',
 						description: 'Check Domain Health and Configuration',
@@ -65,6 +71,76 @@ export class VerifiEmail implements INodeType {
 				default: 'contact@verifi.email',
 				placeholder: 'user@example.org',
 				description: 'The email address to validate',
+			},
+			{
+				displayName: 'Email Input Method',
+				name: 'emailInputMethod',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						operation: ['bulkValidateEmails'],
+					},
+				},
+				options: [
+					{
+						name: 'JSON Array',
+						value: 'jsonArray',
+						description: 'Provide emails as a JSON array',
+					},
+					{
+						name: 'Individual Emails',
+						value: 'individual',
+						description: 'Add individual email addresses',
+					},
+				],
+				default: 'jsonArray',
+			},
+			{
+				displayName: 'Emails (JSON Array)',
+				name: 'emailsJson',
+				type: 'string',
+				displayOptions: {
+					show: {
+						operation: ['bulkValidateEmails'],
+						emailInputMethod: ['jsonArray'],
+					},
+				},
+				default: '["user1@example.org", "user2@example.org", "invalid-email"]',
+				placeholder: '["user1@example.org", "user2@example.org"]',
+				description: 'Array of email addresses to validate in JSON format',
+			},
+			{
+				displayName: 'Emails',
+				name: 'emails',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+				displayOptions: {
+					show: {
+						operation: ['bulkValidateEmails'],
+						emailInputMethod: ['individual'],
+					},
+				},
+				default: {},
+				options: [
+					{
+						name: 'emailAddress',
+						displayName: 'Email Address',
+						values: [
+							{
+								displayName: 'Email',
+								name: 'email',
+								type: 'string',
+								default: '',
+								placeholder: 'user@example.org',
+								description: 'Email address to validate',
+								required: true,
+							},
+						],
+					},
+				],
 			},
 			{
 				displayName: 'Domain',
@@ -133,6 +209,67 @@ export class VerifiEmail implements INodeType {
 					returnData.push({
 						json: {
 							email,
+							...response,
+						},
+						pairedItem: {
+							item: i,
+						},
+					});
+
+				} else if (operation === 'bulkValidateEmails') {
+					const emailInputMethod = this.getNodeParameter('emailInputMethod', i) as string;
+					let emails: string[] = [];
+
+					if (emailInputMethod === 'jsonArray') {
+						const emailsJson = this.getNodeParameter('emailsJson', i) as string;
+						try {
+							emails = JSON.parse(emailsJson);
+							if (!Array.isArray(emails)) {
+								throw new NodeOperationError(this.getNode(), 'Emails must be provided as a JSON array', {
+									itemIndex: i,
+								});
+							}
+						} catch (error) {
+							throw new NodeOperationError(this.getNode(), 'Invalid JSON format for emails array', {
+								itemIndex: i,
+							});
+						}
+					} else if (emailInputMethod === 'individual') {
+						const emailsData = this.getNodeParameter('emails', i) as any;
+						if (emailsData && emailsData.emailAddress) {
+							emails = emailsData.emailAddress.map((item: any) => item.email).filter((email: string) => email);
+						}
+					}
+
+					if (!emails || emails.length === 0) {
+						throw new NodeOperationError(this.getNode(), 'At least one email address is required', {
+							itemIndex: i,
+						});
+					}
+
+					const options: IHttpRequestOptions = {
+						method: 'POST' as IHttpRequestMethods,
+						url: 'https://api.verifi.email/v1/bulk/check',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json',
+						},
+						body: {
+							emails: emails,
+						},
+						json: true,
+						skipSslCertificateValidation: true,
+					};
+
+					const response = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'verifiEmailApi',
+						options,
+					);
+
+					returnData.push({
+						json: {
+							emails: emails,
 							...response,
 						},
 						pairedItem: {
