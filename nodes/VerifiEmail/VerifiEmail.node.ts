@@ -89,6 +89,11 @@ export class VerifiEmail implements INodeType {
 						description: 'Provide emails as a JSON array',
 					},
 					{
+						name: 'Comma Separated',
+						value: 'commaSeparated',
+						description: 'Provide emails as comma-separated values',
+					},
+					{
 						name: 'Individual Emails',
 						value: 'individual',
 						description: 'Add individual email addresses',
@@ -109,6 +114,20 @@ export class VerifiEmail implements INodeType {
 				default: '["user1@example.org", "user2@example.org", "invalid-email"]',
 				placeholder: '["user1@example.org", "user2@example.org"]',
 				description: 'Array of email addresses to validate in JSON format',
+			},
+			{
+				displayName: 'Emails (Comma Separated)',
+				name: 'emailsCommaSeparated',
+				type: 'string',
+				displayOptions: {
+					show: {
+						operation: ['bulkValidateEmails'],
+						emailInputMethod: ['commaSeparated'],
+					},
+				},
+				default: 'user1@example.org, user2@example.org, invalid-email',
+				placeholder: 'user1@example.org, user2@example.org',
+				description: 'Comma-separated list of email addresses to validate',
 			},
 			{
 				displayName: 'Emails',
@@ -234,6 +253,12 @@ export class VerifiEmail implements INodeType {
 								itemIndex: i,
 							});
 						}
+					} else if (emailInputMethod === 'commaSeparated') {
+						const emailsCommaSeparated = this.getNodeParameter('emailsCommaSeparated', i) as string;
+						emails = emailsCommaSeparated
+							.split(',')
+							.map(email => email.trim().replace(/^["']|["']$/g, ''))
+							.filter(email => email.length > 0);
 					} else if (emailInputMethod === 'individual') {
 						const emailsData = this.getNodeParameter('emails', i) as any;
 						if (emailsData && emailsData.emailAddress) {
