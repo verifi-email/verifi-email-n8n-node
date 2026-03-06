@@ -60,6 +60,9 @@
 		"Email Syntax",
 		"Syntax Check",
 		"VerifiEmail",
-		"Verifi"
+		"Verifi",
+		"validate",
+		"verify",
+		"email"
 	]
 }
